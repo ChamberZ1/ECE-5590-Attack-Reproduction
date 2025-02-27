@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>My Profile - {{ username }}</h2>
+        <a href="{{ url_for('global_feed') }}">Global Feed</a> |
+        <a href="{{ url_for('following_feed') }}">Following Feed</a> |
+        <a href="{{ url_for('users') }}">Follow Users</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+        <h3>My Posts</h3>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <p>{{ post[2] }}</p>
+                    <p>❤️ {{ post[3] }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You haven't posted anything yet.</p>
+        {% endif %}
+
+        <h3>Following</h3>
+        {% if following %}
+            <ul>
+                {% for user in following %}
+                    <li>{{ user[1] }} (User ID: {{ user[0] }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You're not following anyone yet.</p>
+        {% endif %}
+
+        <h3>Followers</h3>
+        {% if followers %}
+            <ul>
+                {% for user in followers %}
+                    <li>{{ user[1] }} (User ID: {{ user[0] }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No one is following you yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

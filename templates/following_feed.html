@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Following Feed</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Following Feed</h2>
+        <a href="{{ url_for('global_feed') }}">Global Feed</a> |
+        <a href="{{ url_for('post') }}">Create Post</a> |
+        <a href="{{ url_for('users') }}">Follow Users</a> |
+        <a href="{{ url_for('profile') }}">My Profile</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <p><strong>{{ post[1] }} (User ID: {{ post[0] }})</strong></p>
+                    <p>{{ post[2] | safe }}</p>
+                    <p>❤️ {{ post[3] }} <a href="{{ url_for('like', post_id=post[0]) }}">Like</a></p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You are not following anyone yet. Follow users to see their posts here.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
