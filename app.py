@@ -104,42 +104,20 @@ def post():
     
     return render_template("post.html")
 
-# @app.route("/follow/<int:user_id>", methods=["GET", "POST"])
-# def follow(user_id):
-#     # Ensure user is logged in
-#     if "user" not in session:
-#         return redirect(url_for("register_login"))
-    
-#     cur = get_db().cursor()
-#     cur.execute(
-#         "INSERT INTO follows (follower_id, followed_id) VALUES ((SELECT id FROM users WHERE username = ?), ?)", 
-#         (session["user"], user_id)
-#     )
-#     get_db().commit()
-#     return redirect(url_for("users"))
-
 @app.route("/follow/<int:user_id>", methods=["GET", "POST"])
 def follow(user_id):
+    # Ensure user is logged in
     if "user" not in session:
-        return redirect(url_for("register_login"))  # Redirects if not logged in
-
+        return redirect(url_for("register_login"))
+    
     cur = get_db().cursor()
-
-    cur.execute("SELECT id FROM users WHERE username = ?", (session["user"],))
-    user = cur.fetchone()
-
-    if not user:
-        return redirect(url_for("users"))
-
-    follower_id = user[0]
-
-    # Insert follow relationship
     cur.execute(
-        "INSERT OR IGNORE INTO follows (follower_id, followed_id) VALUES (?, ?)",
-        (follower_id, user_id),
+        "INSERT INTO follows (follower_id, followed_id) VALUES ((SELECT id FROM users WHERE username = ?), ?)", 
+        (session["user"], user_id)
     )
     get_db().commit()
-    return redirect(url_for("users"))  # Redirects back to users list
+    return redirect(url_for("users"))
+
 
 
 # List All Users
