@@ -125,11 +125,8 @@ def users():
     return render_template("users.html", users=users)
 
 # Like Post
-@app.route("/like/<int:post_id>")
+@app.route("/like/<int:post_id>", methods=["GET"])
 def like(post_id):
-    if "user" not in session:
-        return redirect(url_for("register_login"))
-    
     cur = get_db().cursor()
     cur.execute("UPDATE posts SET likes = likes + 1 WHERE id = ?", (post_id,))
     get_db().commit()
