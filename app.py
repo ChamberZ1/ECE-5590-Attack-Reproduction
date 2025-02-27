@@ -4,6 +4,11 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = 'secret'  # Required for session handling
 
+
+# Makes login vunerable due to cookies
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
+
 DATABASE = 'vulnerable_social.db'
 
 # Connect to SQLite
@@ -99,19 +104,43 @@ def post():
     
     return render_template("post.html")
 
-# Follow User
-@app.route("/follow/<int:user_id>")
+# @app.route("/follow/<int:user_id>", methods=["GET", "POST"])
+# def follow(user_id):
+#     # Ensure user is logged in
+#     if "user" not in session:
+#         return redirect(url_for("register_login"))
+    
+#     cur = get_db().cursor()
+#     cur.execute(
+#         "INSERT INTO follows (follower_id, followed_id) VALUES ((SELECT id FROM users WHERE username = ?), ?)", 
+#         (session["user"], user_id)
+#     )
+#     get_db().commit()
+#     return redirect(url_for("users"))
+
+@app.route("/follow/<int:user_id>", methods=["GET", "POST"])
 def follow(user_id):
     if "user" not in session:
-        return redirect(url_for("register_login"))
-    
+        return redirect(url_for("register_login"))  # Redirects if not logged in
+
     cur = get_db().cursor()
+
+    cur.execute("SELECT id FROM users WHERE username = ?", (session["user"],))
+    user = cur.fetchone()
+
+    if not user:
+        return redirect(url_for("users"))
+
+    follower_id = user[0]
+
+    # Insert follow relationship
     cur.execute(
-        "INSERT INTO follows (follower_id, followed_id) VALUES ((SELECT id FROM users WHERE username = ?), ?)", 
-        (session["user"], user_id)
+        "INSERT OR IGNORE INTO follows (follower_id, followed_id) VALUES (?, ?)",
+        (follower_id, user_id),
     )
     get_db().commit()
-    return redirect(url_for("users"))
+    return redirect(url_for("users"))  # Redirects back to users list
+
 
 # List All Users
 @app.route("/users")
