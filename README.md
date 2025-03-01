@@ -25,21 +25,25 @@ python setup_db.py
 ```
 python app.py
 ```
+The site comes with 3 accounts with the following credentials:
 
+- `admin:admin`
+- `bob:bob`
+- `alice:alice`
+
+Additional accounts can be created
+
+Register a user with the following
+- Username: >username<
+- Password: >password<
+
+Log in with these credentials
 
 # SQL injection
 
-Register a user with the following
-    - Username: admin
-    - Password: password of your liking
-
-Log in with these credetials
-
-Logout
-
-Go back to login page as type the following into username:
-    - Username: admin' --
-    - Password: anything doesnt matter
+Go to login page and append `' --` to the username, for example:
+- Username: `admin' --`
+- Password: >any<
 
 This logs you in as admin without needing the password
 
