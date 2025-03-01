@@ -15,7 +15,7 @@
 
         {% for post in posts %}
             <div class="post">
-                <p><strong>{{ post[1] }} (User ID: {{ post[0] }})</strong></p>
+                <p><strong>{{ post[1] }} (Post ID: {{ post[0] }})</strong></p>
                 <p>{{post[2] | safe}}</p>
                 <p>❤️ {{ post[3] }} <a href="{{ url_for('like', post_id=post[0]) }}">Like</a></p>
             </div>
