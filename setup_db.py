@@ -6,7 +6,7 @@ cursor = conn.cursor()
 cursor.execute("""
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
+    username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
 """)
@@ -27,6 +27,15 @@ CREATE TABLE follows (
     followed_id INTEGER NOT NULL
 );
 """)
+
+default_users = [
+    ("admin", "admin"),
+    ("alice", "alice"),
+    ("bob", "bob")
+]
+
+for user in default_users:
+    cursor.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", user)
 
 conn.commit()
 conn.close()

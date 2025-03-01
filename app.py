@@ -35,9 +35,24 @@ def register_login():
         cur = get_db().cursor()
         
         if action == "register":
+            cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+            existing_user = cur.fetchone()
+
+            if existing_user:
+                return '''
+                <script>
+                    alert("Username already exists! Try a different one.");
+                    window.history.back(); 
+                </script>
+                '''
             cur.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-            get_db().commit()
-            return redirect(url_for("register_login"))
+            conn.commit()
+            return '''
+            <script>
+                alert("Registration successful! You can now log in.");
+                window.history.back()"; 
+            </script>
+            '''
         
         elif action == "login":
             query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
@@ -49,7 +64,12 @@ def register_login():
                 session["user"] = user["username"]  # Ensure correct username is stored
                 return redirect(url_for("following_feed"))
             else:
-                return "Invalid Credentials"
+                return '''
+                <script>
+                    alert("Invalid credentials. Please try again.");
+                    window.history.back();
+                </script>
+                '''
 
     return render_template("register_login.html")
 
