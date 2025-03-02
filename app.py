@@ -46,11 +46,11 @@ def register_login():
                 </script>
                 '''
             cur.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-            conn.commit()
+            get_db().commit()
             return '''
             <script>
                 alert("Registration successful! You can now log in.");
-                window.history.back()"; 
+                window.history.back(); 
             </script>
             '''
         
