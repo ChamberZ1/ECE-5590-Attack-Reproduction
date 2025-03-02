@@ -69,7 +69,7 @@ fetch('/post', {  // Sends request to create new post on website
         '</scr' + 'ipt>')
 });
 </script>
-I'm the best! // what users will see
+I'm the best! 
 ```
 
 3) Logout
